@@ -23,37 +23,33 @@ class GameOfLife {
 
         this.arrayInitialization = () => {
 
-            for (let i = 0; i < this.cells_in_rows; i++) {
-                this.active_array[i] = [];
-                for (let j = 0; j < this.cells_in_column; j++) {
-                    this.active_array[i][j] = 0;
+            for (let row = 0; row < this.cells_in_rows; row++) {
+                for (let col = 0; col < this.cells_in_column; col++) {
+                    this.active_array[(row * this.cells_in_column) + col] = 0;
                 }
             }
             this.inactive_array = this.active_array;
-
         };
 
         this.arrayRandomize = () => {
-
-            for (let i = 0; i < this.cells_in_rows; i++) {
-                for (let j = 0; j < this.cells_in_column; j++) {
-                    this.active_array[i][j] = (Math.random() > 0.5) ? 1 : 0;
+            for (let row = 0; row < this.cells_in_rows; row++) {
+                for (let col = 0; col < this.cells_in_column; col++) {
+                    this.active_array[(row * this.cells_in_column) + col] = (Math.random() > 0.5) ? 1 : 0;
                 }
             }
-
         };
 
         this.fillArray = () => {
 
-            for (let i = 0; i < this.cells_in_rows; i++) {
-                for (let j = 0; j < this.cells_in_column; j++) {
+            for (let row = 0; row < this.cells_in_rows; row++) {
+                for (let col = 0; col < this.cells_in_column; col++) {
                     let color;
-                    if (this.active_array[i][j] == 1)
+                    if (this.active_array[(row * this.cells_in_column) + col] == 1)
                         color = this.alive_color;
                     else
                         color = this.dead_color;
                     ctx.fillStyle = color;
-                    ctx.fillRect(j * this.cell_size, i * this.cell_size, this.cell_size, this.cell_size);
+                    ctx.fillRect(col * this.cell_size, row * this.cell_size, this.cell_size, this.cell_size);
                 }
             }
 
@@ -61,7 +57,7 @@ class GameOfLife {
 
         this.setCellValueHelper = (row, col) => {
             try {
-                return this.active_array[row][col];
+                return this.active_array[(row * this.cells_in_column) + col];
             }
             catch {
                 return 0;
@@ -89,22 +85,22 @@ class GameOfLife {
                 return 0;
             }
             // dead cell with 3 neighbours becomes alive. 0 => 1
-            else if (this.active_array[row][col] === 0 && total === 3) {
+            else if (this.active_array[(row * this.cells_in_column) + col] === 0 && total === 3) {
                 return 1;
             }
             // or returning its status back. 0 => 0; 1 => 1
             else {
-                return this.active_array[row][col];
+                return this.active_array[(row * this.cells_in_column) + col];
             }
 
         };
 
         this.updateLifeCycle = () => {
 
-            for (let i = 0; i < this.cells_in_rows; i++) {
-                for (let j = 0; j < this.cells_in_column; j++) {
-                    let new_state = this.updateCellValue(i, j);
-                    this.inactive_array[i][j] = new_state;
+            for (let row = 0; row < this.cells_in_rows; row++) {
+                for (let col = 0; col < this.cells_in_column; col++) {
+                    let new_state = this.updateCellValue(row, col);
+                    this.inactive_array[(row * this.cells_in_column) + col] = new_state;
                 }
             }
             this.active_array = this.inactive_array
